@@ -24,6 +24,8 @@ class AccountConfig:
     smtp_host: str = ""
     smtp_port: int = 465
     use_ssl: bool = True
+    host: str = ""  # xmpp: server host (SRV lookup if omitted)
+    port: int = 0  # xmpp: server port (default 5222 if omitted)
     password: str = ""
     password_env: str = ""
 
@@ -39,6 +41,7 @@ class AccountConfig:
 class FriendConfig:
     name: str
     address: str
+    adapter: str = ""  # empty = applies to every adapter
 
 
 @dataclass(slots=True)
