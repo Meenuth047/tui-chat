@@ -49,6 +49,7 @@ adapters (email / demo / future XMPP-Matrix)
 - `store.py` — SQLite cache (offline history, search, duplicate suppression)
 - `adapters/base.py` — the `Adapter` interface every transport implements
 - `adapters/email.py` — IMAP IDLE + SMTP
+- `adapters/xmpp.py` — real-time chat via XMPP (slixmpp)
 - `adapters/demo.py` — in-memory adapter, no credentials needed
 - `app.py` — Textual three-pane UI
 
@@ -68,20 +69,28 @@ python3 -m venv .venv
 .venv/bin/tui-chat --demo
 ```
 
-## Configure email
+## Configure
 
 ```bash
 cp config.example.toml ~/.config/tui-chat/config.toml
-export TUI_CHAT_PASSWORD='your-app-password'   # or set `password` in the file
+export TUI_CHAT_XMPP_PASSWORD='your-password'   # must match `password_env`
 .venv/bin/tui-chat
 ```
 
-Notes:
+Both adapters are driven entirely by the config file — keep whichever
+`[[account]]` blocks you want.
 
-- **Gmail** requires an App Password (enable 2FA); "less secure apps" was removed
-  in 2022. Use `imap.gmail.com` / `smtp.gmail.com`.
-- Credentials stay local. Never commit them; prefer `password_env`.
-- A "room" is a friend's address; subjects are collapsed so threads read like DMs.
+**XMPP** (real-time) — you need a JID (`you@server`); register on a public server
+(`jabber.at`, `xmpp.jp`, `disroot.org`) or self-host Snikket/Prosody. Your friend
+joins the same server with any XMPP client (Conversations, Gajim, Swift). Rooms
+are keyed by bare JID.
+
+**Email** (async, near-real-time via IMAP IDLE) — Gmail requires an App Password
+(2FA); "less secure apps" was removed in 2022. Use `imap.gmail.com` /
+`smtp.gmail.com`. A room is a friend's address; subjects are collapsed so threads
+read like DMs.
+
+Credentials stay local — never commit them; prefer `password_env`.
 
 ## Tests
 
@@ -100,7 +109,7 @@ PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 .venv/bin/python -m pytest -q -p asyncio
 
 - [x] Adapter interface + Bus + Store
 - [x] Email adapter (IMAP IDLE push, SMTP send)
-- [ ] **XMPP adapter** — true real-time terminal-to-terminal chat
+- [x] XMPP adapter — real-time terminal chat with any XMPP client
 - [ ] Matrix adapter (via an existing homeserver)
 - [ ] Mute/batch outgoing email to avoid inbox spam
 - [ ] Message search UI (`Store.search` is already there)
