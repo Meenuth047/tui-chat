@@ -1,0 +1,27 @@
+# Copy to ~/.config/tui-chat/config.toml and fill in your details.
+# Run `tui-chat` (no config) to try the built-in demo mode first.
+
+[general]
+# Where the local message cache lives.
+# cache = "~/.local/share/tui-chat/messages.db"
+
+[[account]]
+adapter = "email"
+name = "personal"
+address = "you@example.com"
+imap_host = "imap.example.com"   # e.g. imap.gmail.com
+imap_port = 993
+smtp_host = "smtp.example.com"   # e.g. smtp.gmail.com
+smtp_port = 465
+use_ssl = true
+# Never commit a real password. Prefer an env var:
+password_env = "TUI_CHAT_PASSWORD"
+# For Gmail use an App Password (2FA required); "less secure apps" is gone.
+
+[[friend]]
+name = "Alice"
+address = "alice@example.com"
+
+[[friend]]
+name = "Bob"
+address = "bob@example.com"
