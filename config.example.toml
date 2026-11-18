@@ -5,23 +5,38 @@
 # Where the local message cache lives.
 # cache = "~/.local/share/tui-chat/messages.db"
 
+
+# --- Real-time chat over XMPP (recommended) ---------------------------------
+# Your friend uses any XMPP client (Conversations, Gajim, Swift); only your
+# side runs in the terminal.
 [[account]]
-adapter = "email"
-name = "personal"
-address = "you@example.com"
-imap_host = "imap.example.com"   # e.g. imap.gmail.com
-imap_port = 993
-smtp_host = "smtp.example.com"   # e.g. smtp.gmail.com
-smtp_port = 465
-use_ssl = true
-# Never commit a real password. Prefer an env var:
-password_env = "TUI_CHAT_PASSWORD"
-# For Gmail use an App Password (2FA required); "less secure apps" is gone.
+adapter = "xmpp"
+name = "me"
+address = "you@example.org"          # your JID
+# host = "example.org"               # optional; DNS SRV is used if omitted
+# port = 5222
+password_env = "TUI_CHAT_XMPP_PASSWORD"
 
 [[friend]]
+adapter = "xmpp"
 name = "Alice"
-address = "alice@example.com"
+address = "alice@example.org"        # your friend's JID
 
-[[friend]]
-name = "Bob"
-address = "bob@example.com"
+
+# --- Email as chat (async, near-real-time via IMAP IDLE) --------------------
+# [[account]]
+# adapter = "email"
+# name = "personal"
+# address = "you@example.com"
+# imap_host = "imap.example.com"     # e.g. imap.gmail.com
+# imap_port = 993
+# smtp_host = "smtp.example.com"     # e.g. smtp.gmail.com
+# smtp_port = 465
+# use_ssl = true
+# password_env = "TUI_CHAT_EMAIL_PASSWORD"
+# # For Gmail use an App Password (2FA required); "less secure apps" is gone.
+#
+# [[friend]]
+# adapter = "email"
+# name = "Bob"
+# address = "bob@example.com"
