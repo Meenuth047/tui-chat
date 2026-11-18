@@ -13,12 +13,20 @@ from .config import AppConfig, load_config
 from .store import Store
 
 
+def _friends_for(config: AppConfig, adapter_name: str) -> list[tuple[str, str]]:
+    return [(f.name, f.address) for f in config.friends if f.adapter in ("", adapter_name)]
+
+
 def build_adapters(config: AppConfig, bus: Bus) -> list[Adapter]:
-    friends = [(f.name, f.address) for f in config.friends]
     adapters: list[Adapter] = []
     for account in config.accounts:
+        friends = _friends_for(config, account.adapter)
         if account.adapter == "email":
             adapters.append(EmailAdapter(bus, account, friends=friends))
+        elif account.adapter == "xmpp":
+            from .adapters.xmpp import XmppAdapter
+
+            adapters.append(XmppAdapter(bus, account, friends=friends))
         else:
             logging.warning("unknown adapter %r; skipping account %s", account.adapter, account.name)
     return adapters
